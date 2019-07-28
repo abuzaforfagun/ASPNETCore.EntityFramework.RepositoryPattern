@@ -8,6 +8,10 @@
             {
                 <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">@emp.Name</a></li>
             }
+            @if (@Model.Employees.Count == 0)
+            {
+                <li>No data available</li>
+            }
         </ul>
     </div>
 </div>
