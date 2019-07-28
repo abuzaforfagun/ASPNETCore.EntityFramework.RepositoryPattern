@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ASPNETCore.EntityFramework.RepositoryPattern.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
 using ASPNETCore.EntityFramework.RepositoryPattern.Core;
 using ASPNETCore.EntityFramework.RepositoryPattern.Core.Models;
+using ASPNETCore.EntityFramework.RepositoryPattern.ViewModels;
 
 namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
 {
@@ -22,12 +17,18 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
         }
         public IActionResult Index()
         {
-            var emp = new Employee();
-            emp.Name = "Employee 1";
-            emp.Email = "emp@email.com";
-            employeeRepository.Add(emp);
-            unitOfWorkRepository.Complete();
-            return View();
+            //var emp = new Employee();
+            //emp.Name = "Employee 1";
+            //emp.Email = "emp@email.com";
+            //employeeRepository.Add(emp);
+            //unitOfWorkRepository.Complete();
+            var viewModel = new IndexViewModel
+            {
+                Employees = employeeRepository.Get()
+            };
+            return View(viewModel);
         }
+
+
     }
 }

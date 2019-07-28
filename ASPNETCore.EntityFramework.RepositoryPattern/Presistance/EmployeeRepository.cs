@@ -1,8 +1,6 @@
 ﻿using ASPNETCore.EntityFramework.RepositoryPattern.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ASPNETCore.EntityFramework.RepositoryPattern.Core.Models;
 
 namespace ASPNETCore.EntityFramework.RepositoryPattern.Presistance
@@ -23,6 +21,11 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Presistance
         public Employee Get(int id)
         {
             return context.Employees.SingleOrDefault(e => e.Id == id);
+        }
+
+        public IList<Employee> Get()
+        {
+            return context.Employees.ToList();
         }
 
         public void Remove(Employee employee)
