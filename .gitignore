@@ -1,0 +1,4 @@
+.vs/*
+ASPNETCore.EntityFramework.RepositoryPattern/.vscode/*
+ASPNETCore.EntityFramework.RepositoryPattern/bin/*
+ASPNETCore.EntityFramework.RepositoryPattern/obj/*
