@@ -17,16 +17,26 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
         }
         public IActionResult Index()
         {
-            //var emp = new Employee();
-            //emp.Name = "Employee 1";
-            //emp.Email = "emp@email.com";
-            //employeeRepository.Add(emp);
-            //unitOfWorkRepository.Complete();
             var viewModel = new IndexViewModel
             {
                 Employees = employeeRepository.Get()
             };
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Form(int id)
+        {
+            var emp = employeeRepository.Get(id);
+            return View(emp);
+        }
+
+        [HttpPost]
+        public IActionResult Form(Employee employee)
+        {
+            employeeRepository.Update(employee);
+            unitOfWorkRepository.Complete();
+            return View();
         }
 
         public IActionResult Error()

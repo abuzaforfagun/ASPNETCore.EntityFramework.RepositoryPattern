@@ -32,5 +32,12 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Presistance
         {
             context.Employees.Remove(employee);
         }
+
+        public void Update(Employee employee)
+        {
+            var emp = context.Employees.Single(e => e.Id == employee.Id);
+            emp.Name = employee.Name;
+            emp.Email = employee.Email;
+        }
     }
 }

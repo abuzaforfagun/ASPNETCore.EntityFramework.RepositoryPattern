@@ -9,5 +9,6 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Core
         void Remove(Employee employee);
         Employee Get(int id);
         IList<Employee> Get();
+        void Update(Employee employee);
     }
 }

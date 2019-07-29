@@ -1,0 +1,29 @@
+﻿@model ASPNETCore.EntityFramework.RepositoryPattern.Core.Models.Employee 
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Employee Form</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Form" method="post">
+            <div>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+
+            <div>
+                <label asp-for="Email"></label>
+                <input asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div>
+                <input type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>

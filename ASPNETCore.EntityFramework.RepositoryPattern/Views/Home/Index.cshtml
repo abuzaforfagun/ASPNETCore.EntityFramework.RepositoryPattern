@@ -6,7 +6,7 @@
         <ul>
             @foreach (var emp in @Model.Employees)
             {
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">@emp.Name</a></li>
+                <li><a href="Home/Form/@emp.Id">@emp.Name</a></li>
             }
             @if (@Model.Employees.Count == 0)
             {
