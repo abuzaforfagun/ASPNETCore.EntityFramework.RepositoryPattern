@@ -28,6 +28,10 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
         public IActionResult Form(int id)
         {
             var emp = employeeRepository.Get(id);
+            if (emp == null)
+            {
+                return View("Error");
+            }
             return View(emp);
         }
 
