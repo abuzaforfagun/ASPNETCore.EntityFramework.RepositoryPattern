@@ -11,26 +11,35 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
 {
     public class HomeControllerTests
     {
+        private Mock<IEmployeeRepository> _empRepositoryMock;
+        private Mock<IUnitOfWorkRepository> _unitOfWorkMock;
+        private HomeController _controller;
+        public HomeControllerTests()
+        {
+            _empRepositoryMock = new Mock<IEmployeeRepository>();
+            _unitOfWorkMock = new Mock<IUnitOfWorkRepository>();
+            _controller = new HomeController(_unitOfWorkMock.Object, _empRepositoryMock.Object);
+
+            _empRepositoryMock.Setup(u => u.GetAsync()).ReturnsAsync(new List<Employee>
+            {
+                new Employee{ Id = 1, Email = "abc@a.com", Name = "Abid" }
+            });
+            _empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(
+                new Employee { Id = 1, Email = "abc@a.com", Name = "Abid" }
+            );
+
+        }
         [Fact]
         public async void Index_Should_Render_View()
         {
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync()).ReturnsAsync(new List<Employee>());
-            var controller = new HomeController(It.IsAny<IUnitOfWorkRepository>(), empRepositoryMock.Object);
-            var result = await controller.Index() as ViewResult;
+            var result = await _controller.Index() as ViewResult;
             Assert.NotNull(result);
         }
 
         [Fact]
         public async void Index_Should_Contain_Employee_Data()
         {
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync()).ReturnsAsync(new List<Employee>
-            {
-                new Employee{Email = "abc@a.com", Id = 1, Name = "Abid" }
-            });
-            var controller = new HomeController(It.IsAny<IUnitOfWorkRepository>(), empRepositoryMock.Object);
-            var result = await controller.Index() as ViewResult;
+            var result = await _controller.Index() as ViewResult;
             Assert.IsAssignableFrom<IndexViewModel>(result.Model);
 
             var viewModel = result.Model as IndexViewModel;
@@ -40,22 +49,14 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
         [Fact]
         public async void Form_Should_Render_View()
         {
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(new Employee());
-            var controller = new HomeController(It.IsAny<IUnitOfWorkRepository>(), empRepositoryMock.Object);
-            var result = await controller.Form(1) as ViewResult;
+            var result = await _controller.Form(1) as ViewResult;
             Assert.NotNull(result);
         }
 
         [Fact]
         public async void Form_Should_Contain_Employee_Data()
         {
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(
-                new Employee{Email = "abc@a.com", Id = 1, Name = "Abid" }
-            );
-            var controller = new HomeController(It.IsAny<IUnitOfWorkRepository>(), empRepositoryMock.Object);
-            var result = await controller.Form(1) as ViewResult;
+            var result = await _controller.Form(1) as ViewResult;
             Assert.IsAssignableFrom<Employee>(result.Model);
 
             var viewModel = result.Model as Employee;
@@ -66,9 +67,8 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
         [Fact]
         public async void Form_Should_ReturnTo_Error_When_EmployeeData_NotFound()
         {
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(default(Employee));
-            var controller = new HomeController(It.IsAny<IUnitOfWorkRepository>(), empRepositoryMock.Object);
+            _empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(default(Employee));
+            var controller = new HomeController(It.IsAny<IUnitOfWorkRepository>(), _empRepositoryMock.Object);
             var result = await controller.Form(1) as ViewResult;
 
             Assert.Equal("Error", result.ViewName);
@@ -84,14 +84,10 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
                 Email = "abc@a.com",
                 Name = "test1"
             };
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            var unitOfWorkMock = new Mock<IUnitOfWorkRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(employee);
-            var controller = new HomeController(unitOfWorkMock.Object, empRepositoryMock.Object);
-            var result = controller.Form(employee);
+            var result = _controller.Form(employee);
 
-            empRepositoryMock.Verify(r => r.Update(employee), Times.Once);
-            unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
+            _empRepositoryMock.Verify(r => r.Update(employee), Times.Once);
+            _unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
         }
 
         [Fact]
@@ -102,14 +98,10 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
                 Email = "abc@a.com",
                 Name = "test1"
             };
-            var empRepositoryMock = new Mock<IEmployeeRepository>();
-            var unitOfWorkMock = new Mock<IUnitOfWorkRepository>();
-            empRepositoryMock.Setup(u => u.GetAsync(It.IsAny<int>())).ReturnsAsync(employee);
-            var controller = new HomeController(unitOfWorkMock.Object, empRepositoryMock.Object);
-            var result = controller.Form(employee);
+            var result = _controller.Form(employee);
 
-            empRepositoryMock.Verify(r => r.Add(employee), Times.Once);
-            unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
+            _empRepositoryMock.Verify(r => r.Add(employee), Times.Once);
+            _unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
         }
     }
 }
