@@ -74,5 +74,23 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
             Assert.Equal("Error", result.ViewName);
             Assert.Null(result.Model);
         }
+
+        [Fact]
+        public void Post_Form_Should_Update_Record()
+        {
+            var employee = new Employee
+            {
+                Email = "abc@a.com",
+                Name = "test1"
+            };
+            var empRepositoryMock = new Mock<IEmployeeRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWorkRepository>();
+            empRepositoryMock.Setup(u => u.Get(It.IsAny<int>())).Returns(employee);
+            var controller = new HomeController(unitOfWorkMock.Object, empRepositoryMock.Object);
+            var result = controller.Form(employee);
+
+            empRepositoryMock.Verify(r => r.Update(employee), Times.Once);
+            unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
+        }
     }
 }
