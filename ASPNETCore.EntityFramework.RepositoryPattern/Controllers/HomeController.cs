@@ -29,6 +29,10 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
             return View(viewModel);
         }
 
-
+        public IActionResult Error()
+        {
+            return View();
+        }
+        
     }
 }
