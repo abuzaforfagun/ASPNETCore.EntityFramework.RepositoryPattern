@@ -1,5 +1,6 @@
 ﻿using ASPNETCore.EntityFramework.RepositoryPattern.Core.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ASPNETCore.EntityFramework.RepositoryPattern.Core
 {
@@ -7,8 +8,8 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Core
     {
         void Add(Employee employee);
         void Remove(Employee employee);
-        Employee Get(int id);
-        IList<Employee> Get();
+        Task<Employee> GetAsync(int id);
+        Task<IList<Employee>> GetAsync();
         void Update(Employee employee);
     }
 }

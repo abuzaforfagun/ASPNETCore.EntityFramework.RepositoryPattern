@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using ASPNETCore.EntityFramework.RepositoryPattern.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ASPNETCore.EntityFramework.RepositoryPattern.Presistance
 {
@@ -18,14 +20,14 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Presistance
             context.Employees.Add(employee);
         }
 
-        public Employee Get(int id)
+        public async Task<Employee> GetAsync(int id)
         {
-            return context.Employees.SingleOrDefault(e => e.Id == id);
+            return await context.Employees.SingleOrDefaultAsync(e => e.Id == id);
         }
 
-        public IList<Employee> Get()
+        public async Task<IList<Employee>> GetAsync()
         {
-            return context.Employees.ToList();
+            return await context.Employees.ToListAsync();
         }
 
         public void Remove(Employee employee)

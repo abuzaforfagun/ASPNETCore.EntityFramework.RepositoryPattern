@@ -16,11 +16,11 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
             this.unitOfWorkRepository = unitOfWorkRepository;
             this.employeeRepository = employeeRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var viewModel = new IndexViewModel
             {
-                Employees = employeeRepository.Get()
+                Employees = await employeeRepository.GetAsync()
             };
             return View(viewModel);
         }
@@ -33,9 +33,9 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Controllers
 
         [HttpGet]
         [Route("Home/Form/{id}")]
-        public IActionResult Form(int id)
+        public async Task<IActionResult> Form(int id)
         {
-            var emp = employeeRepository.Get(id);
+            var emp = await employeeRepository.GetAsync(id);
             if (emp == null)
             {
                 return View("Error");
