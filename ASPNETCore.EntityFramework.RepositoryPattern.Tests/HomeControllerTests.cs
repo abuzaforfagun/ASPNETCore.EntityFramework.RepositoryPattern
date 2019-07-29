@@ -80,6 +80,7 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
         {
             var employee = new Employee
             {
+                Id = 1,
                 Email = "abc@a.com",
                 Name = "test1"
             };
@@ -90,6 +91,24 @@ namespace ASPNETCore.EntityFramework.RepositoryPattern.Tests
             var result = controller.Form(employee);
 
             empRepositoryMock.Verify(r => r.Update(employee), Times.Once);
+            unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
+        }
+
+        [Fact]
+        public void Post_Form_Should_Create_Record_When_EmployeeIdNotAvailable()
+        {
+            var employee = new Employee
+            {
+                Email = "abc@a.com",
+                Name = "test1"
+            };
+            var empRepositoryMock = new Mock<IEmployeeRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWorkRepository>();
+            empRepositoryMock.Setup(u => u.Get(It.IsAny<int>())).Returns(employee);
+            var controller = new HomeController(unitOfWorkMock.Object, empRepositoryMock.Object);
+            var result = controller.Form(employee);
+
+            empRepositoryMock.Verify(r => r.Add(employee), Times.Once);
             unitOfWorkMock.Verify(u => u.Complete(), Times.Once);
         }
     }

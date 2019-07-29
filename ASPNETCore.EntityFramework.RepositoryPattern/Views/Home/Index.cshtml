@@ -4,6 +4,7 @@
     <div class="col-md-3">
         <h2>Registered Employees</h2>
         <ul>
+            <li><a href ="Home/Form">Add Employee</a></li>
             @foreach (var emp in @Model.Employees)
             {
                 <li><a href="Home/Form/@emp.Id">@emp.Name</a></li>
